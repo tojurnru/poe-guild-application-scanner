@@ -1,0 +1,18 @@
+# Project Tools
+.env
+.eslintcache
+.npm
+build/
+node_modules/
+# jest coverage
+coverage/
+# mikro-orm ts-morph cache entities
+temp/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Local folder to store project related stuff
+local/
