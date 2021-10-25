@@ -1,6 +1,5 @@
 import path from 'path';
 import { Client, Intents } from 'discord.js';
-import { Message as DiscordMessage } from 'discord.js';
 
 import logger from './logger';
 import { handleMessage } from './message';

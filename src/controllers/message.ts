@@ -1,7 +1,7 @@
 import path from 'path';
 import { Message as DiscordMessage } from 'discord.js';
 
-import { Result, parseMessage } from '../parser/parseMessage';
+import { parseMessage } from '../parser/parseMessage';
 import { parseOutput } from '../parser/parseOutput';
 import { parseThreadOutput } from '../parser/parseThreadOutput';
 import { postMessage, postNewThread } from '../api/discord';

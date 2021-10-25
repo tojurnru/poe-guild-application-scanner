@@ -1,5 +1,5 @@
 import path from 'path';
-import { User as DiscordUser, Message as DiscordMessage } from 'discord.js';
+import { Message as DiscordMessage } from 'discord.js';
 
 import { Blacklist } from '../api/github';
 import {
@@ -26,7 +26,7 @@ export type Result = {
 export const parseMessage = async (
   message: DiscordMessage,
 ): Promise<Result | undefined> => {
-  const { content, author, member } = message;
+  const { content, author } = message;
 
   let accountName = '';
 

@@ -1,4 +1,3 @@
-import { channel } from 'diagnostics_channel';
 import { Message as DiscordMessage } from 'discord.js';
 import { Result } from './parseMessage';
 

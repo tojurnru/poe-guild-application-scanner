@@ -4,10 +4,9 @@ import {
   Channel as DiscordChannel,
 } from 'discord.js';
 
-import logger from '../controllers/logger';
 import { axiosErrorHandler } from './errorHandler';
 
-const { DISCORD_BOT_TOKEN = '', DISCORD_BOT_ID } = process.env;
+const { DISCORD_BOT_TOKEN = '' } = process.env;
 const headers = {
   Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
   'Content-Type': 'application/json',
