@@ -9,18 +9,30 @@ export type Profile = {
   achievement: string;
 };
 
+export type Characters = {
+  name: string;
+  league: string;
+  classId: number;
+  ascendancyClass: number;
+  class: string;
+  level: number;
+  experience: number;
+};
+
 // user agent is required to call pathofexile.com api
 const headers = {
   'User-Agent': 'tojurnru:poe-guild-application-scanner-bot',
 };
 
-export const fetchCharacters = async (accountName: string): Promise<any[]> => {
+export const fetchCharacters = async (
+  accountName: string,
+): Promise<Characters[]> => {
   try {
     const url = `https://www.pathofexile.com/character-window/get-characters?accountName=${accountName}`;
 
     const response = await axios.get(url, { headers });
 
-    return response.data as any[];
+    return response.data as Characters[];
   } catch (error) {
     if (axios.isAxiosError(error)) axiosErrorHandler(error);
     throw error;

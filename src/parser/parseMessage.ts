@@ -16,7 +16,8 @@ const filename = path.basename(__filename);
 
 export type Result = {
   accountName: string;
-  characterName: string;
+  charactersCount: number;
+  characters95Count: number;
   blacklist?: Blacklist;
   poeAccountStatus: string;
   poeProfile?: PoeProfile;
@@ -28,7 +29,6 @@ export const parseMessage = async (
   const { content, author, member } = message;
 
   let accountName = '';
-  let characterName = '';
 
   // extract answers
   content.split('\n').forEach((line: string) => {
@@ -37,8 +37,6 @@ export const parseMessage = async (
 
     if (questionLowercase.match(/acc.*nam/)) {
       if (answer) accountName = answer.trim();
-    } else if (questionLowercase.match(/char.*nam/)) {
-      if (answer) characterName = answer.trim();
     }
   });
 
@@ -54,11 +52,16 @@ export const parseMessage = async (
   });
 
   // check if poe account public/private/not found
-  let characters = [];
+  let charactersCount = 0;
+  let characters95Count = 0;
   let httpStatus = 200;
   try {
     logger.debug(`${filename} | fetching poe characters`);
-    characters = await fetchCharacters(accountName);
+    const characters = await fetchCharacters(accountName);
+    charactersCount = characters.length;
+    characters95Count = characters.filter(
+      (character) => character.level >= 95,
+    ).length;
   } catch (error) {
     const { status } = error.response;
     if (status === 403 || status === 404) {
@@ -86,7 +89,8 @@ export const parseMessage = async (
   // return result
   return {
     accountName,
-    characterName,
+    charactersCount,
+    characters95Count,
     blacklist: found.length > 0 ? found[0] : undefined,
     poeAccountStatus,
     poeProfile,

@@ -3,7 +3,8 @@ import { Message as DiscordMessage } from 'discord.js';
 
 import { Result, parseMessage } from '../parser/parseMessage';
 import { parseOutput } from '../parser/parseOutput';
-import { postMessage } from '../api/discord';
+import { parseThreadOutput } from '../parser/parseThreadOutput';
+import { postMessage, postNewThread } from '../api/discord';
 
 import logger from './logger';
 
@@ -25,7 +26,8 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     return;
   }
 
-  const preview = message.content.substr(0, 80);
+  const length = message.content.indexOf('\n');
+  const preview = message.content.substr(0, length >= 0 ? length : undefined);
   logger.debug(`${filename} | Message Received #${message.id}: ${preview}`);
 
   const result = await parseMessage(message);
@@ -35,7 +37,16 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
   }
 
   const output = await parseOutput(result, message);
+  const newMessage = await postMessage(DISCORD_CHANNEL_OUTPUT, output);
 
-  await postMessage(DISCORD_CHANNEL_OUTPUT, output);
+  const threadOutput = await parseThreadOutput(result, message);
+  const channelName = `${message.author.tag} | ${result.accountName}`;
+  await postNewThread(
+    DISCORD_CHANNEL_OUTPUT,
+    newMessage.id,
+    channelName,
+    threadOutput,
+  );
+
   logger.debug(`${filename} | Message Processed #${message.id}.`);
 };
