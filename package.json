@@ -1,7 +1,8 @@
 {
   "name": "poe-guild-application-scanner",
   "version": "0.0.1",
-  "description": "scans our guild application, and check their profile @ pathofexile.com and tft",
+  "description": "Scan our guild application to get their poe profile and check if they are blacklisted in TFT",
+  "license": "Apache-2.0",
   "volta": {
     "node": "16.8.0",
     "yarn": "1.22.15"
