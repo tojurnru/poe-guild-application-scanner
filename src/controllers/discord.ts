@@ -3,7 +3,7 @@ import { Client, Intents } from 'discord.js';
 import { Message as DiscordMessage } from 'discord.js';
 
 import logger from './logger';
-// import { handleMessage } from './message';
+import { handleMessage } from './message';
 
 const filename = path.basename(__filename);
 
@@ -18,10 +18,7 @@ client
   .on('debug', (info) => {
     logger.silly(`${filename} | debug: ${info}`);
   })
-  // .on('messageCreate', handleMessage)
-  .on('messageCreate', (message: DiscordMessage) => {
-    console.log(message.content);
-  })
+  .on('messageCreate', handleMessage)
   .on('error', (err) => {
     logger.error(`${filename} | ${err}`);
     logger.error(err);
