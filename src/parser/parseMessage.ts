@@ -35,7 +35,7 @@ export const parseMessage = async (
     const [question, answer] = line.split(':');
     const questionLowercase = question.toLowerCase();
 
-    if (questionLowercase.match(/acc.*nam/)) {
+    if (questionLowercase.match(/acc.*nam.*:/)) {
       if (answer) accountName = answer.trim();
     }
   });
@@ -83,7 +83,7 @@ export const parseMessage = async (
   if (httpStatus === 200) {
     logger.debug(`${filename} | fetching poe profile`);
     await delay(5000); // 5 seconds delay before calling pathofexile.com again
-    poeProfile = await fetchProfile('tojurnru');
+    poeProfile = await fetchProfile(accountName);
   }
 
   // return result
