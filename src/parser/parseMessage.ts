@@ -16,11 +16,10 @@ const filename = path.basename(__filename);
 
 export type Result = {
   accountName: string;
+  poeProfile: PoeProfile;
   charactersCount: number;
   characters95Count: number;
   blacklist?: Blacklist;
-  poeAccountStatus: string;
-  poeProfile?: PoeProfile;
 };
 
 export const parseMessage = async (
@@ -30,16 +29,21 @@ export const parseMessage = async (
 
   let accountName = '';
 
-  // extract answers
-  content.split('\n').forEach((line: string) => {
+  // extract account name
+  const lines = content.split('\n');
+  for (const line of lines) {
     const [question, answer] = line.split(':');
     const questionLowercase = question.toLowerCase();
 
-    if (questionLowercase.match(/acc.*nam.*:/)) {
-      if (answer) accountName = answer.trim();
+    if (questionLowercase.match(/acc.*name/)) {
+      if (answer && answer.trim()) {
+        accountName = answer.trim();
+        break;
+      }
     }
-  });
+  }
 
+  logger.debug(`Account Name: ${accountName}`);
   if (accountName === '') return;
 
   // check if account under blacklist
@@ -50,49 +54,41 @@ export const parseMessage = async (
     const { account_name, discord_id } = blacklist;
     return account_name === accountNameLowercase || discord_id === author.id;
   });
-
-  // check if poe account public/private/not found
-  let charactersCount = 0;
-  let characters95Count = 0;
-  let httpStatus = 200;
-  try {
-    logger.debug(`${filename} | fetching poe characters`);
-    const characters = await fetchCharacters(accountName);
-    charactersCount = characters.length;
-    characters95Count = characters.filter(
-      (character) => character.level >= 95,
-    ).length;
-  } catch (error) {
-    const { status } = error.response;
-    if (status === 403 || status === 404) {
-      httpStatus = status;
-    } else {
-      throw error;
-    }
-  }
-
-  const poeAccountStatus =
-    httpStatus === 200
-      ? 'public'
-      : httpStatus === 403
-      ? 'private'
-      : 'not found';
+  const blacklist = found.length > 0 ? found[0] : undefined;
 
   // get poe profile
-  let poeProfile;
-  if (httpStatus === 200) {
-    logger.debug(`${filename} | fetching poe profile`);
-    await delay(5000); // 5 seconds delay before calling pathofexile.com again
-    poeProfile = await fetchProfile(accountName);
+  logger.debug(`${filename} | fetching poe profile`);
+
+  let charactersCount = -1;
+  let characters95Count = -1;
+
+  const poeProfile = await fetchProfile(accountName);
+
+  if (poeProfile.status !== 'Public') {
+    return {
+      accountName,
+      poeProfile,
+      charactersCount,
+      characters95Count,
+      blacklist,
+    };
   }
+
+  // get poe characters
+  logger.debug(`${filename} | fetching poe characters`);
+  await delay(5000); // 5 seconds delay before calling pathofexile.com again
+
+  const characters = await fetchCharacters(accountName);
+
+  charactersCount = characters.length;
+  characters95Count = characters.filter((char) => char.level >= 95).length;
 
   // return result
   return {
     accountName,
+    poeProfile,
     charactersCount,
     characters95Count,
-    blacklist: found.length > 0 ? found[0] : undefined,
-    poeAccountStatus,
-    poeProfile,
+    blacklist,
   };
 };

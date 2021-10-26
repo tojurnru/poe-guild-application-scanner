@@ -4,9 +4,10 @@ import cheerio from 'cheerio';
 import { axiosErrorHandler } from './errorHandler';
 
 export type Profile = {
-  joined: string;
-  lastVisit: string;
-  achievement: string;
+  status: string;
+  joined?: string;
+  lastVisit?: string;
+  achievement?: string;
 };
 
 export type Characters = {
@@ -39,11 +40,43 @@ export const fetchCharacters = async (
   }
 };
 
+const getStatus = ($: cheerio.Root): string => {
+  const notFoundStr = $('.layoutBoxContent .strip-heading')
+    .first()
+    .text()
+    .trim();
+
+  if (notFoundStr === 'Profile Not Found') {
+    return 'Not Found';
+  }
+
+  const bannedStr = $('.roleLabel.banned').first().text().trim();
+  if (bannedStr === 'Banned') {
+    return 'Banned';
+  }
+
+  const privateStr = $('.container-content p').first().text().trim();
+
+  const privateStrKeyword =
+    'This profile tab has been set to private, or you lack the permissions to view it.';
+  if (privateStr === privateStrKeyword) {
+    return 'Private';
+  }
+
+  return 'Public';
+};
+
 export const fetchProfile = async (accountName: string): Promise<Profile> => {
   try {
     const url = `https://www.pathofexile.com/account/view-profile/${accountName}`;
     const response = await axios.get(url, { headers });
     const $ = cheerio.load(response.data);
+
+    // get status
+    const status = getStatus($);
+    if (status !== 'Public') {
+      return { status };
+    }
 
     // get joined and last visit
     const box = $('.profile-box.profile').first();
@@ -70,6 +103,7 @@ export const fetchProfile = async (accountName: string): Promise<Profile> => {
     const achievement = rawText2.substr(achieveStart).trim();
 
     return {
+      status,
       joined,
       lastVisit,
       achievement,

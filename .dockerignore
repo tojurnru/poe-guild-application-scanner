@@ -12,8 +12,11 @@ temp/
 .eslintrc.json
 .gitignore
 .prettierrc
+docker-compose.yaml
 Dockerfile
 LICENSE
+README.md
+tsconfig.json
+tsconfig.release.json
 
 *.log
-*.md
