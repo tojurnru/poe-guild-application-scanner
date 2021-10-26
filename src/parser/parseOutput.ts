@@ -20,7 +20,7 @@ export const parseOutput = async (
 
   if (poeProfile.status === 'Public') {
     output += `    Joined:  \`${poeProfile.joined}\`\n`;
-    output += `    Last Visited:  \`${poeProfile.lastVisit}\`\n`;
+    // output += `    Last Visited:  \`${poeProfile.lastVisit}\`\n`;
     output += `    Achievements:  \`${poeProfile.achievement}\`\n`;
     output += `    Total Characters:  \`${charactersCount} (${characters95Count} above Level 95)\`\n`;
   }
