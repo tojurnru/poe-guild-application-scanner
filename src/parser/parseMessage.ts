@@ -35,7 +35,7 @@ export const parseMessage = async (
   const lines = content.split('\n');
   for (const line of lines) {
     const lineLowercase = line.toLowerCase();
-    const words = line.split(' ');
+    const words = line.split(/ |:/);
 
     if (lineLowercase.match(/acc.*name.*:/)) {
       accountName = words[words.length - 1] || '';
