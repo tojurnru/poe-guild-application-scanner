@@ -7,6 +7,7 @@ export const parseOutput = async (
 ): Promise<string> => {
   const {
     accountName,
+    characterName,
     poeProfile,
     charactersCount,
     characters95Count,
@@ -16,6 +17,7 @@ export const parseOutput = async (
   let output = '';
   output += `<@${message.author.id}>\n`;
   output += `Account Name:  \`${accountName}\`\n`;
+  output += `Character Name:  \`${characterName}\`\n`;
   output += `POE Account Status:  \`${poeProfile.status}\`\n`;
 
   if (poeProfile.status === 'Public') {
@@ -26,12 +28,11 @@ export const parseOutput = async (
   }
 
   output += `    Link:  <https://www.pathofexile.com/account/view-profile/${result.accountName}>\n`;
-  output += '\n';
 
   if (!blacklist) {
     output += `TFT Blacklist:  No\n`;
-    output += `    Check Reputation At <https://discord.gg/F9E5v79P74>\n `;
-    output += `    Use Command:  \`!v @${message.author.tag}\`\n`;
+    // output += `    Check Reputation At <https://discord.gg/F9E5v79P74>\n `;
+    // output += `    Use Command:  \`!v @${message.author.tag}\`\n`;
   } else {
     output += `TFT Blacklist:  **YES**\n`;
     output += `    Account Name:  \`${blacklist.account_name}\`\n`;

@@ -16,6 +16,7 @@ const filename = path.basename(__filename);
 
 export type Result = {
   accountName: string;
+  characterName: string;
   poeProfile: PoeProfile;
   charactersCount: number;
   characters95Count: number;
@@ -28,18 +29,18 @@ export const parseMessage = async (
   const { content, author } = message;
 
   let accountName = '';
+  let characterName = '';
 
   // extract account name
   const lines = content.split('\n');
   for (const line of lines) {
-    const [question, answer] = line.split(':');
-    const questionLowercase = question.toLowerCase();
+    const lineLowercase = line.toLowerCase();
+    const words = line.split(' ');
 
-    if (questionLowercase.match(/acc.*name/)) {
-      if (answer && answer.trim()) {
-        accountName = answer.trim();
-        break;
-      }
+    if (lineLowercase.match(/acc.*name.*:/)) {
+      accountName = words[words.length - 1] || '';
+    } else if (lineLowercase.match(/char.*name.*:/)) {
+      characterName = words[words.length - 1] || '';
     }
   }
 
@@ -67,6 +68,7 @@ export const parseMessage = async (
   if (poeProfile.status !== 'Public') {
     return {
       accountName,
+      characterName,
       poeProfile,
       charactersCount,
       characters95Count,
@@ -79,6 +81,14 @@ export const parseMessage = async (
   await delay(5000); // 5 seconds delay before calling pathofexile.com again
 
   const characters = await fetchCharacters(accountName);
+  const charNameLowercase = characterName.toLowerCase();
+
+  const charFound = characters.find(
+    (char) => char.name.toLowerCase() === charNameLowercase,
+  );
+  if (!charFound) {
+    characterName += ' (Not Found)';
+  }
 
   charactersCount = characters.length;
   characters95Count = characters.filter((char) => char.level >= 95).length;
@@ -86,6 +96,7 @@ export const parseMessage = async (
   // return result
   return {
     accountName,
+    characterName,
     poeProfile,
     charactersCount,
     characters95Count,
