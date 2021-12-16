@@ -29,8 +29,6 @@ export const parseMessage = async (
 ): Promise<Result | undefined> => {
   const { content, author } = message;
 
-  logger.debug(content);
-
   let discordId = '';
   let accountName = '';
   let characterName = '';
