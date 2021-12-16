@@ -6,6 +6,7 @@ export const parseOutput = async (
   message: DiscordMessage,
 ): Promise<string> => {
   const {
+    discordId,
     accountName,
     characterName,
     poeProfile,
@@ -14,8 +15,10 @@ export const parseOutput = async (
     blacklist,
   } = result;
 
+  const discordTag = discordId ? `<@${discordId}>` : `<@${message.author.id}>`;
+
   let output = '';
-  output += `<@${message.author.id}>\n`;
+  output += `${discordTag}\n`;
   output += `Account Name:  \`${accountName}\`\n`;
   output += `Character Name:  \`${characterName}\`\n`;
   output += `POE Account Status:  \`${poeProfile.status}\`\n`;

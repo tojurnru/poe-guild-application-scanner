@@ -15,6 +15,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const filename = path.basename(__filename);
 
 export type Result = {
+  discordId: string;
   accountName: string;
   characterName: string;
   poeProfile: PoeProfile;
@@ -28,6 +29,9 @@ export const parseMessage = async (
 ): Promise<Result | undefined> => {
   const { content, author } = message;
 
+  logger.debug(content);
+
+  let discordId = '';
   let accountName = '';
   let characterName = '';
 
@@ -36,11 +40,14 @@ export const parseMessage = async (
   for (const line of lines) {
     const lineLowercase = line.toLowerCase();
     const words = line.split(/ |:/);
+    const value = words[words.length - 1] || '';
 
     if (lineLowercase.match(/acc.*name.*:/)) {
-      accountName = words[words.length - 1] || '';
+      accountName = value;
     } else if (lineLowercase.match(/char.*name.*:/)) {
-      characterName = words[words.length - 1] || '';
+      characterName = value;
+    } else if (lineLowercase.match(/discord.*id.*:/)) {
+      discordId = value;
     }
   }
 
@@ -67,6 +74,7 @@ export const parseMessage = async (
 
   if (poeProfile.status !== 'Public') {
     return {
+      discordId,
       accountName,
       characterName,
       poeProfile,
@@ -95,6 +103,7 @@ export const parseMessage = async (
 
   // return result
   return {
+    discordId,
     accountName,
     characterName,
     poeProfile,

@@ -40,7 +40,8 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
   const newMessage = await postMessage(DISCORD_CHANNEL_OUTPUT, output);
 
   const threadOutput = await parseThreadOutput(result, message);
-  const channelName = `${message.author.tag} | ${result.accountName}`;
+  const discordName = result.discordId ? result.discordId : message.author.tag;
+  const channelName = `${discordName} | ${result.accountName}`;
   await postNewThread(
     DISCORD_CHANNEL_OUTPUT,
     newMessage.id,
