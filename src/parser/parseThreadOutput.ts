@@ -5,11 +5,11 @@ export const parseThreadOutput = async (
   result: Result,
   message: DiscordMessage,
 ): Promise<string> => {
-  const { guildId, channelId, id } = message;
+  // const { guildId, channelId, id } = message;
+  // output += `<https://discord.com/channels/${guildId}/${channelId}/${id}>\n`;
 
-  let output = 'Original Message:\n';
-  output += `<https://discord.com/channels/${guildId}/${channelId}/${id}>\n`;
-  output += message.content;
+  const prefix = 'Original Message:\n';
+  const trimMessage = message.content.substr(0, 2000 - prefix.length);
 
-  return output;
+  return prefix + trimMessage;
 };
