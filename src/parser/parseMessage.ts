@@ -58,7 +58,8 @@ export const parseMessage = async (
   logger.debug(`Account Name: ${accountName}`);
 
   if (accountName === '') {
-    throw new ApplicationError(`Account Name not found. Make sure it is written in a single line (Example: \`Account Name: your-account-name\`).`);
+    const errMessage = 'Account Name not found. Make sure it is written in a single line (Example: `Account Name: your-account-name`).';
+    throw new ApplicationError(errMessage);
   }
 
   // get poe profile
@@ -70,16 +71,7 @@ export const parseMessage = async (
   const poeProfile = await fetchProfile(accountName);
 
   if (poeProfile.status !== 'Public') {
-    throw new ApplicationError(`Account Name (${accountName}) is ${poeProfile.status}.`);
-    // return {
-    //   discordId,
-    //   accountName,
-    //   characterName,
-    //   poeProfile,
-    //   charactersCount,
-    //   characters95Count,
-    //   blacklist,
-    // };
+    throw new ApplicationError(`Account Name is ${poeProfile.status}.`);
   }
 
   // get poe characters
@@ -91,7 +83,8 @@ export const parseMessage = async (
     characters = await fetchCharacters(accountName);
   } catch (err) {
     if (err.response && err.response.status === 403) {
-      throw new ApplicationError(`Account (${accountName}) Character Page is not Public. (Please set your POE Account Character Page to Public).`)
+      const errMessage = 'Account Character Page is not Public. (Please set your POE Account Character Page to Public).';
+      throw new ApplicationError(errMessage);
     } else {
       throw err;
     }
@@ -103,7 +96,9 @@ export const parseMessage = async (
   );
   if (!charFound) {
     // characterName += ' (Not Found)';
-    throw new ApplicationError(`Character Name not found. Make sure it is written in a single line (Example: \`Character Name: your-character-name\`), and it exist in your POE Account Character Page.`);
+    let errMessage = 'Character Name not found. Make sure it is written in a single line ';
+    errMessage += '(Example: `Character Name: your-character-name`), and it exist in your POE Account Character Page.';
+    throw new ApplicationError(errMessage);
   }
 
   charactersCount = characters.length;
