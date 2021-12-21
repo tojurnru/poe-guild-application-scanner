@@ -15,6 +15,7 @@ export const parseOutput = async (
     blacklist,
   } = result;
 
+  // TODO obsolete. remove code?
   const discordTag = discordId ? `<@${discordId}>` : `<@${message.author.id}>`;
 
   let output = '';

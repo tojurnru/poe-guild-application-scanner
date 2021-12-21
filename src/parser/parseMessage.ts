@@ -71,7 +71,7 @@ export const parseMessage = async (
   const poeProfile = await fetchProfile(accountName);
 
   if (poeProfile.status !== 'Public') {
-    throw new ApplicationError(`Account Name is ${poeProfile.status}.`);
+    throw new ApplicationError(`Account is ${poeProfile.status}. (<https://www.pathofexile.com/account/view-profile/${accountName}>)`);
   }
 
   // get poe characters
@@ -83,7 +83,7 @@ export const parseMessage = async (
     characters = await fetchCharacters(accountName);
   } catch (err) {
     if (err.response && err.response.status === 403) {
-      const errMessage = 'Account Character Page is not Public. (Please set your POE Account Character Page to Public).';
+      const errMessage = `Account Character Page is not Public. (<https://www.pathofexile.com/account/view-profile/${accountName}/characters>).`;
       throw new ApplicationError(errMessage);
     } else {
       throw err;
