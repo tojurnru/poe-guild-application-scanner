@@ -69,7 +69,7 @@ export const parseEmbed = async (
   if (!blacklist) {
     fields = fields.concat({
       "name": "TFT Blacklist",
-      "value": "NO",
+      "value": "No",
       "inline": true
     });
   } else {
