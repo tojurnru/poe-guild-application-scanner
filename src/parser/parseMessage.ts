@@ -21,7 +21,8 @@ export type Result = {
   characterName: string;
   poeProfile: PoeProfile;
   charactersCount: number;
-  characters95Count: number;
+  characters80to94: number;
+  characters95to100: number;
   blacklist?: Blacklist;
 };
 
@@ -65,9 +66,6 @@ export const parseMessage = async (
   // get poe profile
   logger.debug(`${filename} | fetching poe profile`);
 
-  let charactersCount = -1;
-  let characters95Count = -1;
-
   const poeProfile = await fetchProfile(accountName);
 
   if (poeProfile.status !== 'Public') {
@@ -101,8 +99,9 @@ export const parseMessage = async (
     throw new ApplicationError(errMessage);
   }
 
-  charactersCount = characters.length;
-  characters95Count = characters.filter((char) => char.level >= 95).length;
+  const charactersCount = characters.length;
+  const characters80to94 = characters.filter((char) => char.level >= 80 && char.level <= 94).length;
+  const characters95to100 = characters.filter((char) => char.level >= 95).length;
 
   // check if account under blacklist
   const blacklists = await getBlacklists();
@@ -121,7 +120,8 @@ export const parseMessage = async (
     characterName,
     poeProfile,
     charactersCount,
-    characters95Count,
+    characters80to94,
+    characters95to100,
     blacklist,
   };
 };

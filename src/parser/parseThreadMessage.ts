@@ -1,7 +1,7 @@
 import { Message as DiscordMessage } from 'discord.js';
 import { Result } from './parseMessage';
 
-export const parseThreadOutput = async (
+export const parseThreadMessage = async (
   result: Result,
   message: DiscordMessage,
 ): Promise<string> => {

@@ -3,9 +3,10 @@ import { Message as DiscordMessage } from 'discord.js';
 
 import { parseMessage } from '../parser/parseMessage';
 import { parseOutput } from '../parser/parseOutput';
-import { parseThreadOutput } from '../parser/parseThreadOutput';
+import { parseEmbed } from '../parser/parseEmbed';
+import { parseThreadMessage } from '../parser/parseThreadMessage';
 import { parseApplicationError } from '../parser/parseApplicationError';
-import { postMessage, postNewThread } from '../api/discord';
+import { postMessage, postRawMessage, postNewThread } from '../api/discord';
 import ApplicationError from '../error/applicationError';
 
 import logger from './logger';
@@ -35,10 +36,16 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
   try {
     const result = await parseMessage(message);
 
-    const output = await parseOutput(result, message);
-    const newMessage = await postMessage(DISCORD_CHANNEL_OUTPUT, output);
+    // post message
+    // const output = await parseOutput(result, message);
+    // const newMessage = await postMessage(DISCORD_CHANNEL_OUTPUT, output);
+    const output = await parseEmbed(result, message);
+    const newMessage = await postRawMessage(DISCORD_CHANNEL_OUTPUT, output);
 
-    const threadOutput = await parseThreadOutput(result, message);
+    // prepare thread message
+    const threadOutput = await parseThreadMessage(result, message);
+
+    // create thread and post thread message
     const discordName = result.discordId ? result.discordId : message.author.tag;
     const channelName = `${discordName} | ${result.accountName}`;
     await postNewThread(

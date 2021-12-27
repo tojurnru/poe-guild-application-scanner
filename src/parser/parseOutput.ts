@@ -11,7 +11,7 @@ export const parseOutput = async (
     characterName,
     poeProfile,
     charactersCount,
-    characters95Count,
+    characters95to100,
     blacklist,
   } = result;
 
@@ -28,7 +28,7 @@ export const parseOutput = async (
     output += `    Joined:  \`${poeProfile.joined}\`\n`;
     // output += `    Last Visited:  \`${poeProfile.lastVisit}\`\n`;
     output += `    Achievements:  \`${poeProfile.achievement}\`\n`;
-    output += `    Total Characters:  \`${charactersCount} (${characters95Count} above Level 95)\`\n`;
+    output += `    Total Characters:  \`${charactersCount} (${characters95to100} above Level 95)\`\n`;
   }
 
   output += `    Link:  <https://www.pathofexile.com/account/view-profile/${result.accountName}>\n`;

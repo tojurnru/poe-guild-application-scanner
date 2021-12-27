@@ -32,6 +32,20 @@ export const postMessage = async (
   }
 };
 
+export const postRawMessage = async (channelId: string, object: any): Promise<DiscordMessage> => {
+  try {
+    const url = `https://discord.com/api/channels/${channelId}/messages`;
+    const config = { headers };
+    const response = await axios.post(url, object, config);
+    await delay(1000); // prevent rate limit error
+
+    return response.data as DiscordMessage;
+  } catch (error) {
+    if (axios.isAxiosError(error)) axiosErrorHandler(error);
+    throw error;
+  }
+};
+
 export const postNewThread = async (
   channelId: string,
   messageId: string,

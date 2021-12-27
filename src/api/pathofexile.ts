@@ -5,6 +5,7 @@ import { axiosErrorHandler } from './errorHandler';
 
 export type Profile = {
   status: string;
+  guild?: string;
   joined?: string;
   lastVisit?: string;
   achievement?: string;
@@ -82,15 +83,23 @@ export const fetchProfile = async (accountName: string): Promise<Profile> => {
     const box = $('.profile-box.profile').first();
     const rawText = box.text();
 
+    const guildKeyword = 'Guild:';
+    const guildIndex = rawText.indexOf(guildKeyword);
+    const postKeyword = 'Forum Posts:';
+    const postIndex = rawText.indexOf(postKeyword);
     const joinKeyword = 'Joined:';
     const joinIndex = rawText.indexOf(joinKeyword);
     const visitKeyword = 'Last Visited:';
     const visitIndex = rawText.indexOf(visitKeyword);
 
+    const guildStart = guildIndex + guildKeyword.length;
+    const guildLength = postIndex - guildStart;
     const joinStart = joinIndex + joinKeyword.length;
     const joinLength = visitIndex - joinStart;
-    const joined = rawText.substr(joinStart, joinLength).trim();
     const visitStart = visitIndex + visitKeyword.length;
+
+    const guild = rawText.substr(guildStart, guildLength).trim();
+    const joined = rawText.substr(joinStart, joinLength).trim();
     const lastVisit = rawText.substr(visitStart).trim();
 
     // get achievements
@@ -104,6 +113,7 @@ export const fetchProfile = async (accountName: string): Promise<Profile> => {
 
     return {
       status,
+      guild,
       joined,
       lastVisit,
       achievement,
