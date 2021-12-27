@@ -20,17 +20,17 @@ export const parseEmbed = async (
 
   let fields = [
     {
-      "name": "Discord ID",
+      "name": "Discord ID                             \u200B",
       "value": discordTag,
       "inline": true
     },
     {
-      "name": "Account Name",
+      "name": "Account Name                       \u200B",
       "value": `\`${accountName}\``,
       "inline": true
     },
     {
-      "name": "Character Name",
+      "name": "Character Name                    \u200B",
       "value": `\`${characterName}\``,
       "inline": true
     },
@@ -75,7 +75,7 @@ export const parseEmbed = async (
   } else {
     fields = fields.concat({
       "name": "TFT Blacklist",
-      "value": "**YES**",
+      "value": "**🚨 YES 🚨**",
       "inline": true
     }, {
       "name": "Blacklisted On",
