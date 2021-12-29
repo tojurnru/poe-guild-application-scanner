@@ -99,7 +99,7 @@ export const parseEmbed = async (
         "description": "",
         "color": 0x0077DD,
         fields,
-        "url": "https://www.pathofexile.com/account/view-profile/Fareekshow"
+        "url": `https://www.pathofexile.com/account/view-profile/${accountName}`
       }
     ],
     /*
