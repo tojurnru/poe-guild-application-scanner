@@ -43,13 +43,13 @@ export const parseMessage = async (
   // extract account name
   const lines = content.split('\n');
   for (const line of lines) {
-    const lineLowercase = line.toLowerCase();
-    const words = line.split(/ |:/);
+    const lineLowercase = line.trim().toLowerCase();
+    const words = line.trim().split(/ |:/);
     const value = words[words.length - 1] || '';
 
-    if (lineLowercase.match(/acc.*name.*:/)) {
+    if (lineLowercase.match(/account.*name.*:/)) {
       accountName = value;
-    } else if (lineLowercase.match(/char.*name.*:/)) {
+    } else if (lineLowercase.match(/character.*name.*:/)) {
       characterName = value;
     } else if (lineLowercase.match(/discord.*id.*:/)) {
       discordId = value;
@@ -59,7 +59,8 @@ export const parseMessage = async (
   logger.debug(`Account Name: ${accountName}`);
 
   if (accountName === '') {
-    const errMessage = 'Account Name not found. Make sure it is written in a single line (Example: `Account Name: your-account-name`).';
+    const errMessage =
+      'Account Name not found. Make sure it is written in a single line (Example: `Account Name: your-account-name`).';
     throw new ApplicationError(errMessage);
   }
 
@@ -69,7 +70,9 @@ export const parseMessage = async (
   const poeProfile = await fetchProfile(accountName);
 
   if (poeProfile.status !== 'Public') {
-    throw new ApplicationError(`Account is ${poeProfile.status}. (<https://www.pathofexile.com/account/view-profile/${accountName}>)`);
+    throw new ApplicationError(
+      `Account is ${poeProfile.status}. (<https://www.pathofexile.com/account/view-profile/${accountName}>)`,
+    );
   }
 
   // get poe characters
@@ -94,14 +97,20 @@ export const parseMessage = async (
   );
   if (!charFound) {
     // characterName += ' (Not Found)';
-    let errMessage = 'Character Name not found. Make sure it is written in a single line ';
-    errMessage += '(Example: `Character Name: your-character-name`), and it exist in your POE Account Character Page.';
+    let errMessage =
+      'Character Name not found. Make sure it is written in a single line ';
+    errMessage +=
+      '(Example: `Character Name: your-character-name`), and it exist in your POE Account Character Page.';
     throw new ApplicationError(errMessage);
   }
 
   const charactersCount = characters.length;
-  const characters80to94 = characters.filter((char) => char.level >= 80 && char.level <= 94).length;
-  const characters95to100 = characters.filter((char) => char.level >= 95).length;
+  const characters80to94 = characters.filter(
+    (char) => char.level >= 80 && char.level <= 94,
+  ).length;
+  const characters95to100 = characters.filter(
+    (char) => char.level >= 95,
+  ).length;
 
   // check if account under blacklist
   const blacklists = await getBlacklists();
