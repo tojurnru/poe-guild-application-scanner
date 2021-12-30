@@ -29,9 +29,7 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     return;
   }
 
-  const length = message.content.indexOf('\n');
-  const preview = message.content.substr(0, length >= 0 ? length : undefined);
-  logger.debug(`${filename} | Message Received #${message.id}: ${preview}`);
+  logger.debug(`${filename} |\n${message.content}`);
 
   try {
     const result = await parseMessage(message);
@@ -46,7 +44,9 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     const threadOutput = await parseThreadMessage(result, message);
 
     // create thread and post thread message
-    const discordName = result.discordId ? result.discordId : message.author.tag;
+    const discordName = result.discordId
+      ? result.discordId
+      : message.author.tag;
     const channelName = `${discordName} | ${result.accountName}`;
     await postNewThread(
       DISCORD_CHANNEL_OUTPUT,
@@ -56,7 +56,6 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     );
 
     logger.debug(`${filename} | Message Processed #${message.id}.`);
-
   } catch (err) {
     if (err instanceof ApplicationError) {
       await parseApplicationError(err, message);
@@ -64,5 +63,4 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
       throw err;
     }
   }
-
 };
