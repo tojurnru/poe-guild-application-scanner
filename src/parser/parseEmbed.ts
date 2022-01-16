@@ -18,6 +18,9 @@ export const parseEmbed = async (
 
   const discordTag = discordId ? `<@${discordId}>` : `<@${message.author.id}>`;
 
+  const createdTimestamp = message.author.createdTimestamp;
+  const createdTime = Math.floor(createdTimestamp / 1000);
+
   let fields = [
     {
       "name": "Discord ID                             \u200B",
@@ -63,6 +66,11 @@ export const parseEmbed = async (
       "name": "Level 95-100",
       "value": characters95to100,
       "inline": true
+    },
+    {
+      "name": "Discord Created Date",
+      "value": `<t:${createdTime}:D> (<t:${createdTime}:R>)`,
+      "inline": false
     }
   ];
 
