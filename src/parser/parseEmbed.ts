@@ -69,8 +69,8 @@ export const parseEmbed = async (
     },
     {
       "name": "Discord Created Date",
-      "value": `<t:${createdTime}:D> (<t:${createdTime}:R>)`,
-      "inline": false
+      "value": `<t:${createdTime}:D>`,
+      "inline": true
     }
   ];
 
@@ -78,6 +78,10 @@ export const parseEmbed = async (
     fields = fields.concat({
       "name": "TFT Blacklist",
       "value": "No",
+      "inline": true
+    }, {
+      "name": "\u200B",
+      "value": "\u200B",
       "inline": true
     });
   } else {
