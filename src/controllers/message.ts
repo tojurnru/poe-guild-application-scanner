@@ -4,7 +4,7 @@ import { Message as DiscordMessage } from 'discord.js';
 import { parseMessage } from '../parser/parseMessage';
 import { parseOutput } from '../parser/parseOutput';
 import { parseEmbed } from '../parser/parseEmbed';
-import { parseThreadMessage } from '../parser/parseThreadMessage';
+import { parseThreadMessage1, parseThreadMessage2 } from '../parser/parseThreadMessage';
 import { parseApplicationError } from '../parser/parseApplicationError';
 import { postMessage, postRawMessage, postNewThread } from '../api/discord';
 import ApplicationError from '../error/applicationError';
@@ -41,18 +41,16 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     const newMessage = await postRawMessage(DISCORD_CHANNEL_OUTPUT, output);
 
     // prepare thread message
-    const threadOutput = await parseThreadMessage(result, message);
+    const threadMessage1 = await parseThreadMessage1(result, message);
+    const threadMessage2 = await parseThreadMessage2(result, message);
 
     // create thread and post thread message
-    const discordName = result.discordId
-      ? result.discordId
-      : message.author.tag;
-    const channelName = `${discordName} | ${result.accountName}`;
     await postNewThread(
       DISCORD_CHANNEL_OUTPUT,
       newMessage.id,
-      channelName,
-      threadOutput,
+      result.accountName,
+      threadMessage1,
+      threadMessage2,
     );
 
     logger.debug(`${filename} | Message Processed #${message.id}.`);

@@ -50,7 +50,8 @@ export const postNewThread = async (
   channelId: string,
   messageId: string,
   channelName: string,
-  message: string,
+  message1: string,
+  message2: string,
 ): Promise<void> => {
   try {
     // create new thread
@@ -62,8 +63,11 @@ export const postNewThread = async (
 
     // post message
     const threadChannel = response.data as DiscordChannel;
-    await postMessage(threadChannel.id, message);
-    await delay(1000); // prevent rate limit error
+    await postMessage(threadChannel.id, message1);
+    await delay(1000);
+
+    await postMessage(threadChannel.id, message2);
+    await delay(1000);
   } catch (error) {
     if (axios.isAxiosError(error)) axiosErrorHandler(error);
     throw error;

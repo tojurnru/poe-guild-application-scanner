@@ -1,7 +1,17 @@
 import { Message as DiscordMessage } from 'discord.js';
 import { Result } from './parseMessage';
 
-export const parseThreadMessage = async (
+export const parseThreadMessage1 = async (
+  result: Result,
+  message: DiscordMessage,
+): Promise<string> => {
+  const discordId = result.discordId ? result.discordId : message.author.id;
+  const discordTag = result.discordId ? '-' : message.author.tag;
+
+  return `<@${discordId}> | ${discordId} | ${discordTag}`;
+};
+
+export const parseThreadMessage2 = async (
   result: Result,
   message: DiscordMessage,
 ): Promise<string> => {
