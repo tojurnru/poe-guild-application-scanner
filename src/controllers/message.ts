@@ -2,22 +2,35 @@ import path from 'path';
 import { Message as DiscordMessage } from 'discord.js';
 
 import { parseMessage } from '../parser/parseMessage';
-import { parseOutput } from '../parser/parseOutput';
+// import { parseOutput } from '../parser/parseOutput';
 import { parseEmbed } from '../parser/parseEmbed';
-import { parseThreadMessage1, parseThreadMessage2 } from '../parser/parseThreadMessage';
+import {
+  parseThreadMessage1,
+  parseThreadMessage2,
+} from '../parser/parseThreadMessage';
 import { parseApplicationError } from '../parser/parseApplicationError';
-import { postMessage, postRawMessage, postNewThread } from '../api/discord';
+// import { postMessage, postRawMessage, postNewThread } from '../api/discord';
+import { postRawMessage, postNewThread } from '../api/discord';
 import ApplicationError from '../error/applicationError';
 
 import logger from './logger';
 
-const { DISCORD_CHANNEL_INPUT = '', DISCORD_CHANNEL_OUTPUT = '' } = process.env;
+const {
+  DISCORD_CHANNEL_INPUT = '',
+  DISCORD_CHANNEL_OUTPUT = '',
+  DISCORD_WHITELIST_IDS = '',
+} = process.env;
+const whitelists = DISCORD_WHITELIST_IDS.split(',');
 
 const filename = path.basename(__filename);
 
 const shouldParseMessage = (message: DiscordMessage): boolean => {
   // only process input channels
   if (message.channelId !== DISCORD_CHANNEL_INPUT) {
+    return false;
+  }
+
+  if (whitelists.includes(message.author.id)) {
     return false;
   }
 
