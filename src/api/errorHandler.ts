@@ -1,10 +1,16 @@
 import { AxiosError, AxiosResponse } from 'axios';
 
-import logger from '../controllers/logger';
+class SimpleAxiosError extends Error {
+  response: AxiosResponse;
+
+  constructor(msg: string, _response: AxiosResponse) {
+    super(msg);
+    this.response = _response;
+    Object.setPrototypeOf(this, SimpleAxiosError.prototype);
+  }
+}
 
 export const axiosErrorHandler = (error: AxiosError) => {
   const response = error.response as AxiosResponse;
-  const dataStr = JSON.stringify(response.data, null, 2);
-  logger.error(`Axios Request: ${response.config.url}`);
-  logger.error(`Axios Response ${response.status}, Data: ${dataStr}`);
+  throw new SimpleAxiosError(error.message, response);
 };
