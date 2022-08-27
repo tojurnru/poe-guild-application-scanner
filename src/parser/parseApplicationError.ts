@@ -4,15 +4,18 @@ import { postMessage } from '../api/discord';
 import logger from '../controllers/logger';
 import ApplicationError from '../error/applicationError';
 
-const { DISCORD_CHANNEL_OUTPUT = '' } = process.env;
+const { DISCORD_CHANNEL_INPUT = '', DISCORD_CHANNEL_OUTPUT = '' } = process.env;
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const parseApplicationError = async (err: ApplicationError, message: DiscordMessage): Promise<void> => {
+export const parseApplicationError = async (
+  err: ApplicationError,
+  message: DiscordMessage,
+): Promise<void> => {
   logger.error(`APPLICATION ERROR FOUND: ${err.message}`);
 
   // DM user
-  let directMsg = `Your application post is deleted due to the following reason:\n`;
+  let directMsg = `Your application post in <#${DISCORD_CHANNEL_INPUT}> is deleted due to the following reason:\n`;
   directMsg += `**${err.message}**\n\n`;
   directMsg += `You are always welcomed to re-apply again once the above issue is resolved.\n\n`;
   directMsg += `Your Original Message:\n`;
@@ -31,5 +34,4 @@ export const parseApplicationError = async (err: ApplicationError, message: Disc
   // Log
   const logMsg = `<@${message.author.id}>'s application deleted because: **${err.message}**`;
   await postMessage(DISCORD_CHANNEL_OUTPUT, logMsg);
-
 };
