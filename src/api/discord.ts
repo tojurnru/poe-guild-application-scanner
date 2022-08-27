@@ -32,7 +32,10 @@ export const postMessage = async (
   }
 };
 
-export const postRawMessage = async (channelId: string, object: any): Promise<DiscordMessage> => {
+export const postRawMessage = async (
+  channelId: string,
+  object: any,
+): Promise<DiscordMessage> => {
   try {
     const url = `https://discord.com/api/channels/${channelId}/messages`;
     const config = { headers };
@@ -52,6 +55,7 @@ export const postNewThread = async (
   channelName: string,
   message1: string,
   message2: string,
+  message3: string,
 ): Promise<void> => {
   try {
     // create new thread
@@ -68,6 +72,11 @@ export const postNewThread = async (
 
     await postMessage(threadChannel.id, message2);
     await delay(1000);
+
+    if (message3.length > 0) {
+      await postMessage(threadChannel.id, message3);
+      await delay(1000);
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) axiosErrorHandler(error);
     throw error;

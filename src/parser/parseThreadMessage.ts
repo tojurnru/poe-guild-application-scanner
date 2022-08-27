@@ -21,3 +21,10 @@ export const parseThreadMessage2 = async (
 
   return message.content.substr(0, 2000);
 };
+
+export const parseThreadMessage3 = async (
+  result: Result,
+  message: DiscordMessage,
+): Promise<string> => {
+  return message.content.substr(2000, 4000);
+};

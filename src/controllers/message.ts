@@ -7,6 +7,7 @@ import { parseEmbed } from '../parser/parseEmbed';
 import {
   parseThreadMessage1,
   parseThreadMessage2,
+  parseThreadMessage3,
 } from '../parser/parseThreadMessage';
 import { parseApplicationError } from '../parser/parseApplicationError';
 // import { postMessage, postRawMessage, postNewThread } from '../api/discord';
@@ -56,6 +57,7 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
     // prepare thread message
     const threadMessage1 = await parseThreadMessage1(result, message);
     const threadMessage2 = await parseThreadMessage2(result, message);
+    const threadMessage3 = await parseThreadMessage3(result, message);
 
     // create thread and post thread message
     await postNewThread(
@@ -64,6 +66,7 @@ export const handleMessage = async (message: DiscordMessage): Promise<void> => {
       result.accountName,
       threadMessage1,
       threadMessage2,
+      threadMessage3,
     );
 
     logger.debug(`${filename} | Message Processed #${message.id}.`);

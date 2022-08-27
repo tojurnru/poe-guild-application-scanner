@@ -23,10 +23,20 @@ export const parseApplicationError = async (
   await message.author.send(directMsg);
   await delay(1000);
 
-  const originalMessage = message.content.substr(0, 2000 - 8);
+  const maxLength = 2000 - 8; // 2000 = max character per message, 8 = backticks
+  const originalMessage = message.content.substr(0, maxLength);
 
   await message.author.send('```\n' + originalMessage + '\n```');
   await delay(1000);
+
+  if (message.content.length > maxLength) {
+    const originalMessage2 = message.content.substr(
+      maxLength,
+      maxLength + maxLength,
+    );
+    await message.author.send('```\n' + originalMessage2 + '\n```');
+    await delay(1000);
+  }
 
   await message.delete();
   await delay(1000);
