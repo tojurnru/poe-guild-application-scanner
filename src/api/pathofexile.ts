@@ -103,7 +103,7 @@ export const fetchProfile = async (accountName: string): Promise<Profile> => {
     const lastVisit = rawText.substr(visitStart).trim();
 
     // get achievements
-    const box2 = $('.profile-box.achievements');
+    const box2 = $('.info.achievements');
     const rawText2 = box2.text();
 
     const achieveKeyword = 'Achievements completed:';
