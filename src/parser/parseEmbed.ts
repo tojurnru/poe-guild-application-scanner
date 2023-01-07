@@ -28,12 +28,12 @@ export const parseEmbed = async (
       "inline": true
     },
     {
-      "name": "Account Name                       \u200B",
+      "name": "Account Name                      \u200B",
       "value": `\`${accountName}\``,
       "inline": true
     },
     {
-      "name": "Character Name                    \u200B",
+      "name": "Character Name                  \u200B",
       "value": `\`${characterName}\``,
       "inline": true
     },
