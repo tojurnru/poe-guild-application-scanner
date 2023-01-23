@@ -17,8 +17,8 @@ export const fetchBlacklist = async (): Promise<Blacklist[]> => {
     const response = await axios.get(url);
     const blacklists = parse(response.data, {
       columns: true,
-      ltrim: true,
-      rtrim: true,
+      trim: true,
+      skip_empty_lines: true,
     });
 
     const normalizedBlacklists = blacklists.map((blacklist: Blacklist) => {

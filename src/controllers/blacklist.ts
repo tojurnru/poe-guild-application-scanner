@@ -17,9 +17,9 @@ export const getBlacklists = async (): Promise<Blacklist[]> => {
   }
 
   // get blacklist from github
+  logger.debug(`${filename} | get blacklist from github`);
   blacklists = await fetchBlacklist();
   createdAt = new Date();
-  logger.debug(`${filename} | get blacklist from github`);
 
   return blacklists;
 };
