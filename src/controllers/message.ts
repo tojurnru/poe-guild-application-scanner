@@ -31,8 +31,10 @@ const shouldParseMessage = (message: DiscordMessage): boolean => {
     return false;
   }
 
+  // if poster is in whitelist
   if (whitelists.includes(message.author.id)) {
-    return false;
+    // and if message DOES NOT contains "discord id:"
+    if (!message.content.toLowerCase().match(/discord.*id.*:/)) return false;
   }
 
   return true;
