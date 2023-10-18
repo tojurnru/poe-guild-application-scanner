@@ -30,7 +30,7 @@ export const fetchCharacters = async (
   accountName: string,
 ): Promise<Characters[]> => {
   try {
-    const url = `https://www.pathofexile.com/character-window/get-characters?accountName=${accountName}`;
+    const url = `https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(accountName)}`;
 
     const response = await axios.get(url, { headers });
 
@@ -69,7 +69,7 @@ const getStatus = ($: cheerio.Root): string => {
 
 export const fetchProfile = async (accountName: string): Promise<Profile> => {
   try {
-    const url = `https://www.pathofexile.com/account/view-profile/${accountName}`;
+    const url = `https://www.pathofexile.com/account/view-profile/${encodeURIComponent(accountName)}`;
     const response = await axios.get(url, { headers });
     const $ = cheerio.load(response.data);
 
